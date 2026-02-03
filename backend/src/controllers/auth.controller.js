@@ -45,6 +45,20 @@ export async function getUser(req, res, next) {
       data: user,
     });
   } catch (error) {
-    next(error);
+    return next(error);
+  }
+}
+
+export async function logout(req, res, next) {
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    return next(error);
   }
 }
