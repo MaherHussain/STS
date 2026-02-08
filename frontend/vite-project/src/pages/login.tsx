@@ -27,7 +27,7 @@ export default function Login() {
     });
   }
   return (
-    <div className="">
+    <div className="flex flex-row justify-center">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         {/* Logo / Title */}
         <div className="text-center mb-6">

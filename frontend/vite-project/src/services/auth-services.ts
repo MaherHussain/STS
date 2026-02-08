@@ -22,3 +22,8 @@ export async function login(payload: Payload): Promise<LoginResponse>{
     const response = await http.post('/auth/login', payload)
     return response.data
 }
+
+export async function logout() {
+    const response = await http.post('/auth/logout')
+    return response.data
+}
