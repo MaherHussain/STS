@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import {Login, AdminDashboard, Home} from "../pages/";
-import ProtectedRoute from './ProtectedRoute'
+import { Login, AdminDashboard, Home } from "../pages/";
+import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import { AdminLayout } from "../layouts";
 
 export default function AppRoutes() {
   return (
@@ -10,8 +11,10 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
       </Route>
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route element={<AdminLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        </Route>
       </Route>
     </Routes>
   );

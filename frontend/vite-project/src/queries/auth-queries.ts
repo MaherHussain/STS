@@ -1,5 +1,5 @@
 import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUser ,login} from '../services/auth-services'
+import { getUser, login, logout } from '../services/auth-services'
 
 export function useGetUser () {
     return useQuery({
@@ -26,5 +26,14 @@ export function useLogin () {
             // Invalidate and refetch user data after successful login
             queryClient.invalidateQueries({ queryKey: ['user'] });
         },
+    })
+}
+export function useLogout() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: logout,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+        }
     })
 }
