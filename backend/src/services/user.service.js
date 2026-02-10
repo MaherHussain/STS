@@ -7,11 +7,10 @@ export async function registerEmployee({ email, name, password, adminId }) {
   const isUserExist = await User.findOne({
     email: normalizedEmail,
     isActive: true,
-    adminId,
   });
 
   if (isUserExist) {
-    throw createHttpError(409, "This email is already exist");
+    throw createHttpError(409, "This email is already exist in the system");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,7 +30,14 @@ export async function registerEmployee({ email, name, password, adminId }) {
     role: newUser.role,
     isActive: newUser.isActive,
     createdAt: newUser.createdAt,
-    createBy: adminId,
+    createdBy: adminId,
     name: newUser.name,
   };
+}
+
+export async function getEmployeesByAdmin(adminId) {
+  const employees = await User.find({ isActive: true, createdBy: adminId })
+    .select("name email createdAt")
+    .sort({ createdAt: -1 });
+  return employees;
 }
