@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema(
       default: true,
       index: true, // used in almost all queries
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null, // this default value for admin that created by system. employee user will have adminId
+    },
   },
   { timestamps: true },
 );
