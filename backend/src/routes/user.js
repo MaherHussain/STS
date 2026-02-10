@@ -1,9 +1,10 @@
 import express from "express";
-import {addUser}from '../controllers/user.controller.js'
+import { addUser, getUsers } from "../controllers/user.controller.js";
 import authorize from "../middlewares/authorize.js";
-import {verifyJWT} from '../middlewares/auth.middleware.js'
-const userRouter = express.Router()
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+const userRouter = express.Router();
 
-userRouter.post("/add", verifyJWT, authorize("ADMIN"), addUser);
+userRouter.route("/add").post(verifyJWT, authorize("ADMIN"), addUser);
+userRouter.route("/users").get(verifyJWT, authorize("ADMIN"), getUsers);
 
 export default userRouter; 
