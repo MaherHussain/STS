@@ -2,12 +2,12 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
 
-export async function registerEmployee({ email, name, password}) {
-
+export async function registerEmployee({ email, name, password, adminId }) {
   const normalizedEmail = email.toLowerCase().trim();
   const isUserExist = await User.findOne({
     email: normalizedEmail,
     isActive: true,
+    adminId,
   });
 
   if (isUserExist) {
@@ -21,15 +21,17 @@ export async function registerEmployee({ email, name, password}) {
     hashedPassword,
     role: "EMPLOYEE",
     isActive: true,
+    createdBy: adminId,
     name,
   });
 
   return {
     id: newUser._id,
     email: newUser.email,
-    role:newUser.role,
+    role: newUser.role,
     isActive: newUser.isActive,
     createdAt: newUser.createdAt,
+    createBy: adminId,
     name: newUser.name,
   };
 }
