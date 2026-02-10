@@ -1,5 +1,6 @@
 import express from "express";
 import authRoute from "../src/routes/auth.js";
+import userRouter from "./routes/user.js";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import cors from "cors";
@@ -24,6 +25,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth/", authRoute);
+app.use("/api/user/", userRouter);
 
 // global error handler
 app.use(globalErrorHandler);
