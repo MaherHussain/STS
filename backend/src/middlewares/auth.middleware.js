@@ -14,9 +14,7 @@ export function verifyJWT(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     // 3️⃣ Attach user info to request
-    req.user = {
-      id: decoded.id,
-    };
+    req.user = decoded;
 
     // 4️⃣ Allow request to continue
     next();
