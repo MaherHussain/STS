@@ -2,6 +2,7 @@ import { useState } from "react";
 import { HiOutlineUser, HiOutlineLockClosed } from "react-icons/hi";
 import { LoadingSpinner } from "../ui-components";
 import { useLogin } from "../queries/auth-queries";
+import { type ApiError } from "../utils/types/";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,11 +18,9 @@ export default function Login() {
     };
 
     mutateAsync(payload, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError: (error: any) => {
+      onError: (error: ApiError) => {
         const message =
           error?.response?.data?.message || error?.message || "Login failed";
-
         setError(message);
       },
     });

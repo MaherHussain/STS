@@ -3,8 +3,33 @@ export interface User {
     email: string,
     role: 'ADMIN' | 'EMPLOYEE'
 }
-
+export interface Employee extends User {
+    isActive: boolean;
+    createdBy: string;
+    name: string | null | undefined;
+}
+export interface EmployeeResponse {
+    success: boolean,
+    message: string,
+    data: Employee
+}
 export interface AuthResponse {
     success: boolean,
     data: User
+}
+export interface ApiErrorResponse {
+    success: boolean;
+    message: string;
+    statusCode?: number;
+}
+
+/**
+ * Axios error structure with API response
+ */
+export interface ApiError {
+    response?: {
+        status: number;
+        data: ApiErrorResponse;
+    };
+    message: string;
 }
