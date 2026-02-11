@@ -1,5 +1,5 @@
 import http from "./http";
-import {type EmployeeResponse} from '../utils/types'
+import { type EmployeeResponse, type EmployeesResponse } from '../utils/types'
 
 type Payload = {
     email:string,
@@ -7,7 +7,12 @@ type Payload = {
     name:string
 }
 
+export async function getEmployees(): Promise<EmployeesResponse> {
+    const response = await http.get('/user/users')
+    return response.data
+}
+
 export async function addEmployee( payload : Payload): Promise<EmployeeResponse> {
-    const response = http.post('/user/add', payload)
-    return (await response).data
+    const response = await http.post('/user/add', payload)
+    return response.data
 }

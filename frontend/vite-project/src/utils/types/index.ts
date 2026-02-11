@@ -13,6 +13,15 @@ export interface EmployeeResponse {
     message: string,
     data: Employee
 }
+export interface EmployeesResponse {
+    success: boolean
+    data: {
+        _id: string;
+        name: string;
+        email: string;
+        createdAt: string;
+}[]
+}
 export interface AuthResponse {
     success: boolean,
     data: User
