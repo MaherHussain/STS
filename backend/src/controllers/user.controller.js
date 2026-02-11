@@ -22,6 +22,7 @@ export async function addUser(req, res, next) {
 
     res.status(201).json({
       success: true,
+      message: "Employee have been added successfully",
       data: employee,
     });
   } catch (error) {
