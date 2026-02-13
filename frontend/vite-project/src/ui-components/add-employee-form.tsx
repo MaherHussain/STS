@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAddEmployee } from "../queries/employee-queries";
 import { type ApiError } from "../utils/types/";
+import { useAuth } from "../utils/hooks/useAuth";
 
 type AddEmployeeModalProps = {
   open: boolean;
@@ -16,7 +17,8 @@ export default function AddEmployeeModal({
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { mutateAsync: addEmployee, isPending } = useAddEmployee();
+  const { user } = useAuth();
+  const { mutateAsync: addEmployee, isPending } = useAddEmployee(user?.id);
 
   if (!open) return null;
 
