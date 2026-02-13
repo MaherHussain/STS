@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addEmployee, getEmployees } from '../services/employee.services'
 
-export function useGetEmployees() {
+export function useGetEmployees(adminId: string | undefined) {
     return useQuery({
-        queryKey: ['employees'],
+        queryKey: ['employees', adminId],
         queryFn: getEmployees,
         retry: false,
         staleTime: 5 * 60 * 1000, // 5 minutes
@@ -12,12 +12,12 @@ export function useGetEmployees() {
     })
 }
 
-export function useAddEmployee () {
+export function useAddEmployee(adminId: string | undefined) {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn:addEmployee,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['employees'] });
+            queryClient.invalidateQueries({ queryKey: ['employees', adminId] });
         }
     })
 }

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button, AddEmployeeForm, EmployeeList } from "../ui-components";
 import { useGetEmployees } from "../queries/employee-queries";
-
+import { useAuth } from "../utils/hooks/useAuth";
 function AdminDashboard() {
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
+  const { user } = useAuth();
 
-  const { data: employeeList, isPending, isError } = useGetEmployees();
+  const { data: employeeList, isPending, isError } = useGetEmployees(user?.id);
   return (
     <div className="flex flex-col">
       <div className="py-3 self-end">
