@@ -4,6 +4,7 @@ import userRouter from "./routes/user.js";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import cors from "cors";
+import shiftLogRouter from "./routes/shift.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get("/health", (req, res) => {
 app.use("/api/auth/", authRoute);
 app.use("/api/user/", userRouter);
 
+app.use("/api/shift/", shiftLogRouter);
 // global error handler
 app.use(globalErrorHandler);
 
