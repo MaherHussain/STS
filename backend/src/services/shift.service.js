@@ -6,9 +6,9 @@ const timeToMinutes = (timeStr) => {
   return hours * 60 + minutes;
 };
 
-export const createShiftLog = async ({ userId, date, startTime, endTime, breakDuration, imageUrl,ownpay }) => {
+export const createShiftLog = async ({ userId, date, startTime, endTime, breakDuration, imageUrl,ownPay }) => {
 
-    if (!startTime || !endTime || !breakDuration || !imageUrl ) {
+    if (!startTime || !endTime || !breakDuration ) {
         const error  = new Error("Missing required fields");
         error.status = 400;
         throw error;
@@ -61,7 +61,7 @@ export const createShiftLog = async ({ userId, date, startTime, endTime, breakDu
     breakDuration: Number(breakDuration) || 0,
     totalHours,
     imageUrl,
-    ownpay,
+    ownPay,
   });
   return await newLog.save();
 };
