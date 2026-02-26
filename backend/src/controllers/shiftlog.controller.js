@@ -2,13 +2,10 @@ import { createShiftLog } from "../services/shift.service.js";
 import createHttpError from "http-errors";
 export const submitShiftLog = async (req, res, next) => {
   try {
-    const { date, startTime, endTime, breakDuration, ownpay } = req.body;
+    const { date, startTime, endTime, breakDuration, ownPay } = req.body;
     const userId = req.user.id;
     if(!startTime || !endTime || !breakDuration){
         return next(createHttpError(400, "StartTime, EndTime and BreakDuration are required fields"));
-    }
-    if (!req.file) {
-      return next(createHttpError(400, "Image proof is required"));
     }
     const newLog = await createShiftLog({
       userId,
@@ -16,8 +13,8 @@ export const submitShiftLog = async (req, res, next) => {
       startTime,
       endTime,
       breakDuration,
-      ownpay,
-      imageUrl: req.file.path,
+      ownPay,
+      imageUrl: req.file?.path ?? null,
     });
     return res.status(201).json({ message: "Work log submitted successfully", data: newLog });
   } catch (error) {

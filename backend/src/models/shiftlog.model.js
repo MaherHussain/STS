@@ -31,9 +31,9 @@ const shiftLogSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      required: true, // Path to the uploaded image
+      required: false, // Path to the uploaded image
     },
-    ownpay: {
+    ownPay: {
       type: Number,
       default: 0,
     },
