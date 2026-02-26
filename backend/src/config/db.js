@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import dsn from "dns/promises";
+import dns from "dns/promises";
 
-dsn.setServers(["1.1.1.1", "8.8.8.8"]);
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 export default async function dbConnection() {
   if (!process.env.MONGO_URI) {

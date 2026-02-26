@@ -51,10 +51,11 @@ export async function getUser(req, res, next) {
 
 export async function logout(req, res, next) {
   try {
+    const isProd = process.env.NODE_ENV === "production";
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
     });
 
     res.status(200).json({ message: "Logged out successfully" });
