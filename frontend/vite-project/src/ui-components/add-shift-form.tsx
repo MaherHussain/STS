@@ -7,6 +7,8 @@ type AddShiftLogModalProps = {
   onClose: () => void;
 };
 
+import { toast } from "react-hot-toast";
+
 export default function AddShiftLogModal({
   open,
   onClose,
@@ -39,6 +41,7 @@ export default function AddShiftLogModal({
 
     addShiftLog(payload, {
       onSuccess: () => {
+        toast.success("Shift log added successfully!");
         setError("");
         // Reset form
         setDate(new Date().toISOString().split("T")[0]);
@@ -52,6 +55,7 @@ export default function AddShiftLogModal({
       onError: (error: ApiError) => {
         const message =
           error?.response?.data?.message || error?.message || "Submission failed";
+        toast.error(message);
         setError(message);
       },
     });
