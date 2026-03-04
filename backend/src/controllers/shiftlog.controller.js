@@ -1,5 +1,6 @@
-import { createShiftLog } from "../services/shift.service.js";
+import { createShiftLog, getShiftReports } from "../services/shift.service.js";
 import createHttpError from "http-errors";
+
 export const submitShiftLog = async (req, res, next) => {
   try {
     const { date, startTime, endTime, breakDuration, ownPay } = req.body;
@@ -22,29 +23,36 @@ export const submitShiftLog = async (req, res, next) => {
   }
 };
 
-/* export const getMonthlyLogs = async (req, res, next) => {
+export async function getShiftLogs(req, res, next) {
   try {
-    const { userId, month, year } = req.query;
-    if (!userId || !month || !year) {
-      return res.status(400).json({ message: "Missing params: userId, month, year" });
-    }
-    // Create date range for the month
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0, 23, 59, 59);
-    const logs = await ShiftLog.find({
-      userId,
-      date: { $gte: startDate, $lte: endDate }, 
-    }).sort({ date: 1 });
-    const totalHours = logs.reduce((sum, log) => sum + log.totalHours, 0);
-    res.status(200).json({
-      data: logs,
-      summary: {
-        totalHours: Number(totalHours.toFixed(2)),
-        count: logs.length
+    const { userId, month, year, date } = req.query;
+    const requestUserId = req.user.id;
+    const userRole = req.user.role;
+
+    let targetUserId = userId;
+
+    if (userRole === "EMPLOYEE") {
+      targetUserId = requestUserId;
+    } else if (userRole === "ADMIN") {
+      if (!targetUserId) {
+        return next(createHttpError(400, "UserId is required for Admin reports"));
       }
+    } else {
+      return next(createHttpError(403, "Unauthorized role"));
+    }
+
+    const reportData = await getShiftReports({
+      userId: targetUserId,
+      month: month ? parseInt(month) : undefined,
+      year: year ? parseInt(year) : undefined,
+      date
+    });
+
+    res.status(200).json({
+      success: true,
+      data: reportData
     });
   } catch (error) {
     next(error);
   }
-
-}; */
+}

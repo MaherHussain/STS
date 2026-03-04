@@ -65,3 +65,32 @@ export const createShiftLog = async ({ userId, date, startTime, endTime, breakDu
   });
   return await newLog.save();
 };
+
+export const getShiftReports = async ({ userId, month, year, date }) => {
+  let query = { userId };
+
+  if (date) {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+    query.date = { $gte: startOfDay, $lte: endOfDay };
+  } else if (month && year) {
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+    query.date = { $gte: startOfMonth, $lte: endOfMonth };
+  }
+
+  const logs = await ShiftLog.find(query).sort({ date: 1 });
+  const totalHours = logs.reduce((sum, log) => sum + (log.totalHours || 0), 0);
+  const totalOwnPay = logs.reduce((sum, log) => sum + (log.ownPay || 0), 0);
+
+  return {
+    logs,
+    summary: {
+      totalHours: Number(totalHours.toFixed(2)),
+      totalOwnPay: Number(totalOwnPay.toFixed(2)),
+      count: logs.length,
+    },
+  };
+};
