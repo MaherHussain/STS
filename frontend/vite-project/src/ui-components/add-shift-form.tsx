@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAddShiftLog } from "../queries/shift-queries";
 import { type ApiError } from "../utils/types";
+import { useAuth } from "../utils/hooks/useAuth";
 
 type AddShiftLogModalProps = {
   open: boolean;
@@ -13,6 +14,8 @@ export default function AddShiftLogModal({
   open,
   onClose,
 }: AddShiftLogModalProps) {
+
+  const { user } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -24,7 +27,7 @@ export default function AddShiftLogModal({
   const cameraInputRef = React.useRef<HTMLInputElement>(null);
   const galleryInputRef = React.useRef<HTMLInputElement>(null);
 
-  const { mutate: addShiftLog, isPending } = useAddShiftLog();
+  const { mutate: addShiftLog, isPending } = useAddShiftLog(user?.id);
 
   if (!open) return null;
 
