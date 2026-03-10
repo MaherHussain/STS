@@ -30,3 +30,8 @@ export async function addShiftLog(payload: Payload) {
     });
     return response.data;
 }
+
+export async function getShiftLogs(userId: string | undefined) {
+    const response = await http.get(`/shift/reports?userId=${userId}`);
+    return response.data;
+}

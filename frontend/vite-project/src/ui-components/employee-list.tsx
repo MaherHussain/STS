@@ -11,12 +11,14 @@ type UsersTableProps = {
   isPending: boolean;
   employees: Employee[] | undefined;
   isError: boolean;
+  onViewLogs: (employee: Employee) => void;
 };
 
 export default function EmployeeList({
   employees,
   isPending,
   isError,
+  onViewLogs,
 }: UsersTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -42,6 +44,7 @@ export default function EmployeeList({
               <th className="px-6 py-4 font-medium">Name</th>
               <th className="px-6 py-4 font-medium">Email</th>
               <th className="px-6 py-4 font-medium">Created</th>
+              <th className="px-6 py-4 font-medium">Actions</th>
             </tr>
           </thead>
 
@@ -56,6 +59,14 @@ export default function EmployeeList({
 
                 <td className="px-6 py-4 text-gray-500">
                   {new Date(employee.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4">
+                  <button
+                    onClick={() => onViewLogs(employee)}
+                    className=" cursor-pointer text-indigo-600 hover:text-indigo-900 font-medium transition-colors"
+                  >
+                    View Logs
+                  </button>
                 </td>
               </tr>
             ))}

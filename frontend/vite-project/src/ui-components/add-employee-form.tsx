@@ -35,6 +35,9 @@ export default function AddEmployeeModal({
       onSuccess: () => {
         setError("");
         onClose();
+        setName("");
+        setEmail("");
+        setPassword("");
       },
       onError: (error: ApiError) => {
         const message =
