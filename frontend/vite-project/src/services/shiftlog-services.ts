@@ -31,7 +31,14 @@ export async function addShiftLog(payload: Payload) {
     return response.data;
 }
 
-export async function getShiftLogs(userId: string | undefined) {
-    const response = await http.get(`/shift/reports?userId=${userId}`);
+export async function getShiftLogs(userId: string | undefined, startDate?: string, endDate?: string) {
+    let url = `/shift/reports?userId=${userId}`;
+    if (startDate) {
+        url += `&startDate=${startDate}`;
+    }
+    if (endDate) {
+        url += `&endDate=${endDate}`;
+    }
+    const response = await http.get(url);
     return response.data;
 }

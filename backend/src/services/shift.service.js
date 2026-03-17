@@ -66,10 +66,24 @@ export const createShiftLog = async ({ userId, date, startTime, endTime, breakDu
   return await newLog.save();
 };
 
-export const getShiftReports = async ({ userId, month, year, date }) => {
+export const getShiftReports = async ({ userId, month, year, date, startDate, endDate }) => {
   let query = { userId };
 
-  if (date) {
+  if (startDate && endDate) {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    query.date = { $gte: start, $lte: end };
+  } else if (startDate) {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    query.date = { $gte: start };
+  } else if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    query.date = { $lte: end };
+  } else if (date) {
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(date);
