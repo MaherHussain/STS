@@ -11,10 +11,10 @@ export function useAddShiftLog(userId: string | undefined) {
     });
 }
 
-export function useGetShiftLogs(userId: string | undefined) {
+export function useGetShiftLogs(userId: string | undefined, startDate?: string, endDate?: string) {
     return useQuery({
-        queryKey: ["shift-logs", userId],
-        queryFn: () => getShiftLogs(userId),
+        queryKey: ["shift-logs", userId, startDate, endDate],
+        queryFn: () => getShiftLogs(userId, startDate, endDate),
         retry: 2,
         refetchOnMount: true,
         refetchOnWindowFocus: true,

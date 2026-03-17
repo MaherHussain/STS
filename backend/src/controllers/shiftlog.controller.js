@@ -25,7 +25,7 @@ export const submitShiftLog = async (req, res, next) => {
 
 export async function getShiftLogs(req, res, next) {
   try {
-    const { userId, month, year, date } = req.query;
+    const { userId, month, year, date, startDate, endDate } = req.query;
     const requestUserId = req.user.id;
     const userRole = req.user.role;
 
@@ -45,7 +45,9 @@ export async function getShiftLogs(req, res, next) {
       userId: targetUserId,
       month: month ? parseInt(month) : undefined,
       year: year ? parseInt(year) : undefined,
-      date
+      date,
+      startDate,
+      endDate
     });
 
     res.status(200).json({
