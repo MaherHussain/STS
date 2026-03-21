@@ -76,15 +76,15 @@ export default function ShiftLogList({
                   </td>
                   <td className="px-4 py-3">
                     {log.imageUrl ? (
-                      <a
-                        href={log.imageUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1"
-                      >
-                        View Image
-                      </a>
-                    ) : (
+                      <img
+                        src={
+                          log.imageUrl.startsWith("http")
+                            ? log.imageUrl
+                            : `/uploads/${log.imageUrl.split(/[\\/]/).pop()}`
+                        }
+                        alt="Proof"
+                        className="w-16 h-16 object-cover rounded shadow-sm border border-gray-200"
+                      />) : (
                       <span className="text-gray-400">No proof</span>
                     )}
                   </td>
