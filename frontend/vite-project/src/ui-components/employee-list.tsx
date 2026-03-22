@@ -58,7 +58,7 @@ export default function EmployeeList({
                 <td className="px-6 py-4 text-gray-600">{employee.email}</td>
 
                 <td className="px-6 py-4 text-gray-500">
-                  {new Date(employee.createdAt).toLocaleDateString()}
+                  {new Date(employee.createdAt).toLocaleDateString("en-GB")}
                 </td>
                 <td className="px-6 py-4">
                   <button
