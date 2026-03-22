@@ -64,7 +64,7 @@ export default function ShiftLogList({
               {logs.map((log: ShiftLog) => (
                 <tr key={log._id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 text-gray-900">
-                    {new Date(log.date).toLocaleDateString()}
+                    {new Date(log.date).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-4 py-3 text-gray-600">{log.startTime}</td>
                   <td className="px-4 py-3 text-gray-600">{log.endTime}</td>
