@@ -32,7 +32,8 @@ export async function addUser(req, res, next) {
 
 export async function getUsers(req, res, next) {
   try {
-    const users = await getEmployeesByAdmin(req.user.id);
+    const { search } = req.query;
+    const users = await getEmployeesByAdmin(req.user.id, search);
 
     return res.status(200).json({
       success: true,
