@@ -35,8 +35,15 @@ export async function registerEmployee({ email, name, password, adminId }) {
   };
 }
 
-export async function getEmployeesByAdmin(adminId) {
-  const employees = await User.find({ isActive: true, createdBy: adminId })
+export async function getEmployeesByAdmin(adminId, search) {
+  const query = { isActive: true, createdBy: adminId };
+
+  if (search) {
+    const searchRegex = new RegExp(search, "i");
+    query.$or = [{ name: searchRegex }, { email: searchRegex }];
+  }
+
+  const employees = await User.find(query)
     .select("name email createdAt")
     .sort({ createdAt: -1 });
   return employees;

@@ -7,8 +7,8 @@ type Payload = {
     name:string
 }
 
-export async function getEmployees(): Promise<EmployeesResponse> {
-    const response = await http.get('/user/users')
+export async function getEmployees(search?: string): Promise<EmployeesResponse> {
+    const response = await http.get('/user/users', { params: { search } })
     return response.data
 }
 
