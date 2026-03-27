@@ -18,11 +18,23 @@ export default function EmployeeLogsModal({
   const [filterEndDate, setFilterEndDate] = useState<string>("");
   const [appliedStartDate, setAppliedStartDate] = useState<string>("");
   const [appliedEndDate, setAppliedEndDate] = useState<string>("");
-  const { data: shiftLogs, isPending, isError } = useGetShiftLogs(
+  const {
+    data: shiftLogs,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useGetShiftLogs(
     employee?._id,
     appliedStartDate || undefined,
     appliedEndDate || undefined
   );
+
+  // Flatten the logs from all pages
+  const allLogs = shiftLogs?.pages.flatMap((page) => page.data.logs) || [];
+  // Summary should be taken from the first page
+  const summary = shiftLogs?.pages[0]?.data.summary;
 
   if (!employee) return null;
 
@@ -94,11 +106,24 @@ export default function EmployeeLogsModal({
         {/* Content */}
         <div className="overflow-y-auto flex-1 pr-1">
             <ShiftLogList 
-                logs={shiftLogs?.data.logs} 
-                summary={shiftLogs?.data.summary}
+            logs={allLogs}
+            summary={summary}
                 isPending={isPending} 
                 isError={isError} 
             />
+
+          {/* Load More Button */}
+          {hasNextPage && (
+            <div className="mt-4 flex justify-center pb-2">
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
+              >
+                {isFetchingNextPage ? "Loading more..." : "Load More"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Actions */}
