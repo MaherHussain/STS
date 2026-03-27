@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { type Payload, addShiftLog, getShiftLogs } from "../services/shiftlog-services";
 
 export function useAddShiftLog(userId: string | undefined) {
@@ -12,11 +12,14 @@ export function useAddShiftLog(userId: string | undefined) {
 }
 
 export function useGetShiftLogs(userId: string | undefined, startDate?: string, endDate?: string) {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ["shift-logs", userId, startDate, endDate],
-        queryFn: () => getShiftLogs(userId, startDate, endDate),
+        queryFn: ({ pageParam }) => getShiftLogs(userId, startDate, endDate, pageParam as string | undefined, 10),
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage) => lastPage.data.pagination?.nextCursor,
         retry: 2,
         refetchOnMount: true,
         refetchOnWindowFocus: true,
+        enabled: !!userId,
     });
 }

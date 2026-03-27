@@ -66,7 +66,7 @@ export const createShiftLog = async ({ userId, date, startTime, endTime, breakDu
   return await newLog.save();
 };
 
-export const getShiftReports = async ({ userId, month, year, date, startDate, endDate }) => {
+export const getShiftReports = async ({ userId, month, year, date, startDate, endDate, cursor, limit = 10 }) => {
   let query = { userId };
 
   if (startDate && endDate) {
@@ -95,16 +95,38 @@ export const getShiftReports = async ({ userId, month, year, date, startDate, en
     query.date = { $gte: startOfMonth, $lte: endOfMonth };
   }
 
-  const logs = await ShiftLog.find(query).sort({ date: 1 });
-  const totalHours = logs.reduce((sum, log) => sum + (log.totalHours || 0), 0);
-  const totalOwnPay = logs.reduce((sum, log) => sum + (log.ownPay || 0), 0);
+  // Calculate summary for the ENTIRE filtered range (before pagination)
+  const allLogsInRange = await ShiftLog.find(query).select("totalHours ownPay");
+  const totalHours = allLogsInRange.reduce((sum, log) => sum + (log.totalHours || 0), 0);
+  const totalOwnPay = allLogsInRange.reduce((sum, log) => sum + (log.ownPay || 0), 0);
+
+  // Apply cursor-based pagination for the logs list
+  const paginationQuery = { ...query };
+  if (cursor) {
+    paginationQuery._id = { $gt: cursor };
+  }
+
+  const logs = await ShiftLog.find(paginationQuery)
+    .sort({ date: -1 }) 
+    .limit(Number(limit) + 1);
+
+  const hasNextPage = logs.length > Number(limit);
+  if (hasNextPage) {
+    logs.pop(); 
+  }
+
+  const nextCursor = hasNextPage ? logs[logs.length - 1]._id : null;
 
   return {
     logs,
     summary: {
       totalHours: Number(totalHours.toFixed(2)),
       totalOwnPay: Number(totalOwnPay.toFixed(2)),
-      count: logs.length,
+      count: allLogsInRange.length,
     },
+    pagination: {
+      nextCursor,
+      hasNextPage,
+    }
   };
 };
