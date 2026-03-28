@@ -17,7 +17,7 @@ function Home() {
     appliedEndDate || undefined
   );
 
-  if(loading) return <LoadingSpinner size={100} />
+  if (loading) return <div className="flex items-center justify-center h-screen"><LoadingSpinner size={100} /></div>
   
   return (
     <div className="flex flex-col space-y-6">

@@ -9,7 +9,7 @@ export default function ProtectedRoute({ allowedRoles }: Props) {
   const { loading, isAuthenticated, user } = useAuth();
 
   if (loading) {
-    return <LoadingSpinner size={80} />;
+    return <div className="flex items-center justify-center h-screen"><LoadingSpinner size={80} /></div>;
   }
 
   if (!isAuthenticated) {
