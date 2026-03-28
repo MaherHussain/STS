@@ -108,8 +108,8 @@ export default function EmployeeLogsModal({
             <ShiftLogList 
             logs={allLogs}
             summary={summary}
-                isPending={isPending} 
-                isError={isError} 
+            isPending={isPending}
+            isError={isError}
             />
 
           {/* Load More Button */}
