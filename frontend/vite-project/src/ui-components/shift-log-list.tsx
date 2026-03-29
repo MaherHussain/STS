@@ -95,16 +95,16 @@ export default function ShiftLogList({
               <tfoot className="bg-gray-50 font-semibold text-gray-900 border-t-2 border-gray-200">
                 <tr>
                   <td className="px-4 py-3" colSpan={3}>Total worked hours</td>
-                  <td className="px-4 py-3"></td>
-                  <td className="px-4 py-3"></td>
+                  
                   <td className="px-4 py-3 text-indigo-600">{summary.totalHours} hrs</td>
+                  <td className="px-4 py-3"></td>
+                  <td className="px-4 py-3"></td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3" colSpan={3}>Total own pay</td>
-                  <td className="px-4 py-3"></td>
-                  <td className="px-4 py-3"></td>
                   <td className="px-4 py-3 text-indigo-600">{summary.totalOwnPay}</td>
-                  
+                  <td className="px-4 py-3"></td>
+                  <td className="px-4 py-3"></td>
                 </tr>
               </tfoot>
             )}
