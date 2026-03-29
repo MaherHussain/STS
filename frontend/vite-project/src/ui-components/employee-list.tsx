@@ -12,6 +12,9 @@ type UsersTableProps = {
   employees: Employee[] | undefined;
   isError: boolean;
   onViewLogs: (employee: Employee) => void;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 };
 
 export default function EmployeeList({
@@ -19,6 +22,9 @@ export default function EmployeeList({
   isPending,
   isError,
   onViewLogs,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 }: UsersTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -72,6 +78,17 @@ export default function EmployeeList({
             ))}
           </tbody>
         </table>
+      )}
+      {hasNextPage && (
+        <div className="p-4 border-t border-gray-100 flex justify-center">
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="px-6 cursor-pointer py-2 text-sm font-medium text-indigo-600 hover:text-indigo-800 disabled:text-gray-400 transition-colors"
+          >
+            {isFetchingNextPage ? "Loading more..." : "Load More"}
+          </button>
+        </div>
       )}
     </div>
   );

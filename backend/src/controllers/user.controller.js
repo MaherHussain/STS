@@ -32,12 +32,17 @@ export async function addUser(req, res, next) {
 
 export async function getUsers(req, res, next) {
   try {
-    const { search } = req.query;
-    const users = await getEmployeesByAdmin(req.user.id, search);
+    const { search, cursor, limit } = req.query;
+    const result = await getEmployeesByAdmin(
+      req.user.id,
+      search,
+      cursor,
+      limit ? parseInt(limit) : 10,
+    );
 
     return res.status(200).json({
       success: true,
-      data: users,
+      data: result,
     });
   } catch (error) {
     next(error);
