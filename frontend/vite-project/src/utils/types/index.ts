@@ -16,11 +16,17 @@ export interface EmployeeResponse {
 export interface EmployeesResponse {
     success: boolean
     data: {
-        _id: string;
-        name: string;
-        email: string;
-        createdAt: string;
-}[]
+        employees: {
+            _id: string;
+            name: string;
+            email: string;
+            createdAt: string;
+        }[];
+        pagination: {
+            nextCursor: string | null;
+            hasNextPage: boolean;
+        }
+    }
 }
 export interface AuthResponse {
     success: boolean,

@@ -26,7 +26,9 @@ function AdminDashboard() {
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const { user } = useAuth();
 
-  const { data: employeeList, isPending, isError } = useGetEmployees(user?.id, debouncedSearchTerm);
+  const { data: employeeListData, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetEmployees(user?.id, debouncedSearchTerm);
+
+  const employees = employeeListData?.pages.flatMap(page => page.data.employees) || [];
 
   return (
     <div className="flex flex-col">
@@ -62,10 +64,13 @@ function AdminDashboard() {
       </div>
 
       <EmployeeList
-        employees={employeeList?.data}
+        employees={employees}
         isPending={isPending}
         isError={isError}
         onViewLogs={(emp) => setSelectedEmployee(emp)}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={!!hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
       />
 
       <Activity mode={isAddFormOpen ? "visible" : "hidden"}>

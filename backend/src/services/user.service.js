@@ -35,7 +35,7 @@ export async function registerEmployee({ email, name, password, adminId }) {
   };
 }
 
-export async function getEmployeesByAdmin(adminId, search) {
+export async function getEmployeesByAdmin(adminId, search, cursor, limit = 10) {
   const query = { isActive: true, createdBy: adminId };
 
   if (search) {
@@ -43,8 +43,28 @@ export async function getEmployeesByAdmin(adminId, search) {
     query.$or = [{ name: searchRegex }, { email: searchRegex }];
   }
 
-  const employees = await User.find(query)
+  const paginationQuery = { ...query };
+  if (cursor) {
+    paginationQuery._id = { $lt: cursor };
+  }
+
+  const employees = await User.find(paginationQuery)
     .select("name email createdAt")
-    .sort({ createdAt: -1 });
-  return employees;
+    .sort({ _id: -1 })
+    .limit(Number(limit) + 1);
+
+  const hasNextPage = employees.length > Number(limit);
+  if (hasNextPage) {
+    employees.pop();
+  }
+
+  const nextCursor = hasNextPage ? employees[employees.length - 1]._id : null;
+
+  return {
+    employees,
+    pagination: {
+      nextCursor,
+      hasNextPage,
+    },
+  };
 }
