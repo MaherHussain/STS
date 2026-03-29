@@ -77,13 +77,17 @@ export default function ShiftLogList({
                   <td className="px-4 py-3">
                     {log.imageUrl ? (
                       <img
-                        src={
-                          log.imageUrl.startsWith("http")
-                            ? log.imageUrl
-                            : `/uploads/${log.imageUrl.split(/[\\/]/).pop()}`
-                        }
+                        src={log.imageUrl}
                         alt="Proof"
                         className="w-16 h-16 object-cover rounded shadow-sm border border-gray-200"
+                        onError={(e) => {
+                          // Fallback for old local files if they still exist in the database
+                          const target = e.target as HTMLImageElement;
+                          if (!target.src.includes("/uploads/")) {
+                            const fileName = log.imageUrl?.split(/[\\/]/).pop();
+                            target.src = `/uploads/${fileName}`;
+                          }
+                        }}
                       />) : (
                       <span className="text-gray-400">No proof</span>
                     )}
