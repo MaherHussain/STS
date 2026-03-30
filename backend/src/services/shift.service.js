@@ -1,10 +1,5 @@
 import ShiftLog from "../models/shiftlog.model.js";
-
-// Helper to convert "HH:mm" to minutes
-const timeToMinutes = (timeStr) => {
-  const [hours, minutes] = timeStr.split(":").map(Number);
-  return hours * 60 + minutes;
-};
+import { calculateShiftHours } from "../utils/calculations.js";
 
 export const createShiftLog = async ({ userId, date, startTime, endTime, breakDuration, imageUrl,ownPay }) => {
 
@@ -41,18 +36,8 @@ export const createShiftLog = async ({ userId, date, startTime, endTime, breakDu
     throw error;
   }
 
-  // Calculate duration
-  const startMinutes = timeToMinutes(startTime);
-  const endMinutes = timeToMinutes(endTime);
-  let durationMinutes = endMinutes - startMinutes;
-  // Handle overnight shifts
-  // If end time is smaller than start time (e.g., 09:00 vs 23:00), we assume it's the next day
-  if (durationMinutes < 0) {
-    durationMinutes += 24 * 60;
-  }
-  
-  const totalMinutes = durationMinutes - (Number(breakDuration) || 0);
-  const totalHours = Number((totalMinutes / 60).toFixed(2));
+  // Calculate total hours using the utility function
+  const totalHours = calculateShiftHours(startTime, endTime, breakDuration);
   const newLog = new ShiftLog({
     userId,
     date: shiftDate, // Uses the provided date or 'now'
