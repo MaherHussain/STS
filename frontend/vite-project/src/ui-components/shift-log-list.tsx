@@ -76,6 +76,7 @@ export default function ShiftLogList({
                   </td>
                   <td className="px-4 py-3">
                     {log.imageUrl ? (
+                      <a href={log.imageUrl} target="_blank" rel="noopener noreferrer">
                       <img
                         src={log.imageUrl}
                         alt="Proof"
@@ -88,7 +89,8 @@ export default function ShiftLogList({
                             target.src = `/uploads/${fileName}`;
                           }
                         }}
-                      />) : (
+                        />
+                      </a>) : (
                       <span className="text-gray-400">No proof</span>
                     )}
                   </td>
