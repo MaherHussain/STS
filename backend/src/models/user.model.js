@@ -33,6 +33,14 @@ const userSchema = new mongoose.Schema(
       ref: "User",
       default: null, // this default value for admin that created by system. employee user will have adminId
     },
+    shiftTemplate: {
+      type: {
+        startTime: String,
+        endTime: String,
+        breakDuration: Number,
+      },
+      default: null,
+    },
   },
   { timestamps: true },
 );

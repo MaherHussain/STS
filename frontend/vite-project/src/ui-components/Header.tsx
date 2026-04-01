@@ -1,5 +1,7 @@
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiSettings } from "react-icons/fi";
 import { useAuth } from "../utils/hooks/useAuth";
+import { useState } from "react";
+import ShiftTemplateSettings from "./shift-template-settings";
 
 interface AppHeaderProps {
   title?: string;
@@ -13,8 +15,16 @@ export default function Header({
   onLogout,
 }: AppHeaderProps) {
   const { user } = useAuth();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   return (
     <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between space-x-4">
+      {/* Settings Modal */}
+      <ShiftTemplateSettings
+        open={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
+
       {/* Left */}
       <div className="">
         <h1 className="text-2xl font-semibold  text-[#1E5BBE]">{title}</h1>
@@ -25,6 +35,15 @@ export default function Header({
         {user?.email && (
           <span className=" sm:block text-sm text-gray-600">{user.email}</span>
         )}
+
+        <button
+          onClick={() => setIsSettingsOpen(true)}
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+          title="Shift Template Settings"
+        >
+          <FiSettings className="text-lg" />
+          <span className="hidden sm:inline">Settings</span>
+        </button>
 
         <button
           onClick={onLogout}

@@ -17,13 +17,26 @@ export default function AddShiftLogModal({
 
   const { user } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [breakDuration, setBreakDuration] = useState<number>(0);
+
   const [ownPay, setOwnPay] = useState<number | undefined>(undefined);
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState("");
-  
+
+  const applyTemplate = () => {
+    if (user?.shiftTemplate) {
+      setStartTime(user.shiftTemplate.startTime);
+      setEndTime(user.shiftTemplate.endTime);
+      setBreakDuration(user.shiftTemplate.breakDuration);
+      toast.success("Template applied!");
+    } else {
+      toast.error("No template found. Set one in Settings first.");
+    }
+  };
+
   const cameraInputRef = React.useRef<HTMLInputElement>(null);
   const galleryInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -87,6 +100,19 @@ export default function AddShiftLogModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+
+          {user?.shiftTemplate && (
+            <div className="bg-blue-50 p-3 rounded-lg flex items-center justify-between border border-blue-100">
+              <span className="text-sm font-medium text-blue-700">Apply saved template?</span>
+              <button
+                type="button"
+                onClick={applyTemplate}
+                className="text-xs bg-white text-blue-600 px-3 py-1.5 rounded-md border border-blue-200 hover:bg-blue-600 hover:text-white transition-all font-semibold"
+              >
+                Apply Template
+              </button>
+            </div>
+          )}
             
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">

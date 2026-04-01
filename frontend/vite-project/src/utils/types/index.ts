@@ -1,7 +1,12 @@
 export interface User {
     id: string,
     email: string,
-    role: 'ADMIN' | 'EMPLOYEE'
+    role: 'ADMIN' | 'EMPLOYEE',
+    shiftTemplate?: {
+        startTime: string;
+        endTime: string;
+        breakDuration: number;
+    }
 }
 export interface Employee extends User {
     isActive: boolean;

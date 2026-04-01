@@ -2,6 +2,7 @@ import createHttpError from "http-errors";
 import {
   registerEmployee,
   getEmployeesByAdmin,
+  updateUserTemplateService,
 } from "../services/user.service.js";
 
 export async function addUser(req, res, next) {
@@ -24,6 +25,25 @@ export async function addUser(req, res, next) {
       success: true,
       message: "Employee have been added successfully",
       data: employee,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateMyTemplate(req, res, next) {
+  try {
+    const { startTime, endTime, breakDuration } = req.body;
+    const user = await updateUserTemplateService(req.user.id, {
+      startTime,
+      endTime,
+      breakDuration,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Template updated successfully",
+      data: user.shiftTemplate,
     });
   } catch (error) {
     next(error);

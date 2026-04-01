@@ -68,3 +68,23 @@ export async function getEmployeesByAdmin(adminId, search, cursor, limit = 10) {
     },
   };
 }
+
+export async function updateUserTemplateService(userId, { startTime, endTime, breakDuration }) {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      shiftTemplate: {
+        startTime,
+        endTime,
+        breakDuration,
+      },
+    },
+    { new: true }
+  );
+
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+
+  return user;
+}
