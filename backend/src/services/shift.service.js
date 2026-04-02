@@ -88,11 +88,24 @@ export const getShiftReports = async ({ userId, month, year, date, startDate, en
   // Apply cursor-based pagination for the logs list
   const paginationQuery = { ...query };
   if (cursor) {
-    paginationQuery._id = { $gt: cursor };
+    if (cursor.includes("_")) {
+      const [cursorId, cursorDateStr] = cursor.split("_");
+      const cursorDate = new Date(cursorDateStr);
+      
+      // Correct composite cursor logic for descending sort:
+      // (date < cursorDate) OR (date == cursorDate AND _id < cursorId)
+      paginationQuery.$or = [
+        { date: { $lt: cursorDate } },
+        { date: cursorDate, _id: { $lt: cursorId } }
+      ];
+    } else {
+      // Fallback for simple ID cursor
+      paginationQuery._id = { $lt: cursor };
+    }
   }
 
   const logs = await ShiftLog.find(paginationQuery)
-    .sort({ date: -1 }) 
+    .sort({ date: -1, _id: -1 }) 
     .limit(Number(limit) + 1);
 
   const hasNextPage = logs.length > Number(limit);
@@ -100,7 +113,8 @@ export const getShiftReports = async ({ userId, month, year, date, startDate, en
     logs.pop(); 
   }
 
-  const nextCursor = hasNextPage ? logs[logs.length - 1]._id : null;
+  const lastLog = logs[logs.length - 1];
+  const nextCursor = hasNextPage && lastLog ? `${lastLog._id}_${lastLog.date.toISOString()}` : null;
 
   return {
     logs,
