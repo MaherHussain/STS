@@ -13,9 +13,15 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const allowedOrigins = [
+  ...(process.env.FRONTEND_URL || "").split(","),
+  ...(process.env.CORS_ORIGIN || "").split(","),
+  "http://localhost:5173", // Default local dev
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: (process.env.FRONTEND_URL || "http://localhost:5173").split(","),
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
