@@ -8,4 +8,14 @@ const http = axios.create({
     },
 
 })
+
+// Request interceptor to add the Bearer token to headers
+http.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export default http

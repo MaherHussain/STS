@@ -24,6 +24,7 @@ export async function login(req, res, next) {
       success: true,
       message: "logged in successfully",
       data: safeUser,
+      accessToken, // ✅ Also return token in body for mobile fallback
     });
   } catch (error) {
     return next(error);

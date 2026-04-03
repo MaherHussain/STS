@@ -20,10 +20,17 @@ export async function getUser (): Promise<User> {
 
 export async function login(payload: Payload): Promise<LoginResponse>{
     const response = await http.post('/auth/login', payload)
+
+    // Store token locally for mobile browser support (cookie fallback)
+    if (response.data?.accessToken) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+    }
+
     return response.data
 }
 
 export async function logout() {
     const response = await http.post('/auth/logout')
+    localStorage.removeItem("accessToken");
     return response.data
 }
