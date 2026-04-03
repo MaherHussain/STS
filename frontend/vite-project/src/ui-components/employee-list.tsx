@@ -43,7 +43,7 @@ export default function EmployeeList({
           Failed to load employees. Please try again.
         </div>
       )}
-      {employees?.length && (
+      {employees && employees.length > 0 && (
         <table className="w-full border-collapse text-left text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
