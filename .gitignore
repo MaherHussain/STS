@@ -10,3 +10,6 @@ uploads/
 *.png
 *.jpeg
 *.gif
+
+# Whitelist specific assets
+!frontend/vite-project/src/assets/logo.png
