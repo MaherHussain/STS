@@ -133,14 +133,14 @@ export default function ShiftLogList({
                     <td className="px-4 py-3">Total</td>
                     <td className="px-4 py-3 text-indigo-600" colSpan={1}></td>
                     <td className="px-4 py-3 text-indigo-600">{summary.totalHours.toFixed(2)} hrs</td>
-                    <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0}</td>
+                    <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0} DKK</td>
                     <td className="px-4 py-3"></td>
                   </tr>
                 ) : (
                     <tr>
                       <td className="px-4 py-3">Total</td>
-                      <td className="px-4 py-3 text-green-600">{summary.totalRevenue?.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0}</td>
+                      <td className="px-4 py-3 text-green-600">{summary.totalRevenue?.toLocaleString()} DKK</td>
+                      <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0} DKK</td>
                       <td className="px-4 py-3"></td>
                     </tr>
                 )}
