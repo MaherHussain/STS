@@ -1,10 +1,13 @@
 import { LoadingSpinner } from "../ui-components/index";
 
+import { type User } from "../utils/types";
+
 type Employee = {
   _id: string;
   name: string;
   email: string;
   createdAt: string;
+  payType: User['payType'];
 };
 
 type UsersTableProps = {
@@ -14,7 +17,7 @@ type UsersTableProps = {
   onViewLogs: (employee: Employee) => void;
   fetchNextPage: () => void;
   hasNextPage: boolean;
-  isFetchingNextPage: boolean;
+  isFetchingNextPage: boolean
 };
 
 export default function EmployeeList({
@@ -49,7 +52,7 @@ export default function EmployeeList({
             <tr>
               <th className="px-6 py-4 font-medium">Name</th>
               <th className="px-6 py-4 font-medium">Email</th>
-              <th className="px-6 py-4 font-medium">Created</th>
+              <th className="px-6 py-4 font-medium">Pay Type</th>
               <th className="px-6 py-4 font-medium">Actions</th>
             </tr>
           </thead>
@@ -64,7 +67,7 @@ export default function EmployeeList({
                 <td className="px-6 py-4 text-gray-600">{employee.email}</td>
 
                 <td className="px-6 py-4 text-gray-500">
-                  {new Date(employee.createdAt).toLocaleDateString("en-GB")}
+                  {employee.payType}
                 </td>
                 <td className="px-6 py-4">
                   <button

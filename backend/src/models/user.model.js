@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
       },
       default: null,
     },
+    payType: {
+      type: String,
+      enum: ["HOURLY", "REVENUE"],
+      default: "HOURLY",
+    },
   },
   { timestamps: true },
 );

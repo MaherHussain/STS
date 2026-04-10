@@ -2,9 +2,10 @@ import http from "./http";
 import { type EmployeeResponse, type EmployeesResponse } from '../utils/types'
 
 type Payload = {
-    email:string,
-    password:string,
-    name:string
+    email: string,
+    password: string,
+    name: string,
+    payType: 'HOURLY' | 'REVENUE'
 }
 
 export async function getEmployees(search?: string, cursor?: string, limit: number = 10): Promise<EmployeesResponse> {

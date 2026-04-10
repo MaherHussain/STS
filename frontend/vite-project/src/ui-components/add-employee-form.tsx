@@ -15,6 +15,8 @@ export default function AddEmployeeModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [payType, setPayType] = useState<"HOURLY" | "REVENUE">("HOURLY");
+
   const [error, setError] = useState("");
 
   const { user } = useAuth();
@@ -29,6 +31,7 @@ export default function AddEmployeeModal({
       email,
       password,
       name,
+      payType,
     };
 
     addEmployee(payload, {
@@ -38,6 +41,7 @@ export default function AddEmployeeModal({
         setName("");
         setEmail("");
         setPassword("");
+        setPayType("HOURLY");
       },
       onError: (error: ApiError) => {
         const message =
@@ -107,6 +111,38 @@ export default function AddEmployeeModal({
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
+          </div>
+
+          <div>
+            <label className="mb-3 block text-sm font-medium text-gray-700">
+              Payment System
+            </label>
+            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setPayType("HOURLY")}
+                className={`
+                  py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer
+                  ${payType === "HOURLY" 
+                    ? "bg-indigo-600 text-white shadow-md" 
+                    : "text-gray-600 hover:bg-gray-200"}
+                `}
+              >
+                Hourly
+              </button>
+              <button
+                type="button"
+                onClick={() => setPayType("REVENUE")}
+                className={`
+                  py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer
+                  ${payType === "REVENUE" 
+                    ? "bg-indigo-600 text-white shadow-md" 
+                    : "text-gray-600 hover:bg-gray-200"}
+                `}
+              >
+                Revenue
+              </button>
+            </div>
           </div>
 
           {/* Actions */}
