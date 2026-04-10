@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
 
-export async function registerEmployee({ email, name, password, adminId }) {
+export async function registerEmployee({ email, name, password, adminId, payType, revenueShare }) {
   const normalizedEmail = email.toLowerCase().trim();
   const isUserExist = await User.findOne({
     email: normalizedEmail,
@@ -22,6 +22,7 @@ export async function registerEmployee({ email, name, password, adminId }) {
     isActive: true,
     createdBy: adminId,
     name,
+    payType: payType || "HOURLY",
   });
 
   return {
@@ -32,6 +33,7 @@ export async function registerEmployee({ email, name, password, adminId }) {
     createdAt: newUser.createdAt,
     createdBy: adminId,
     name: newUser.name,
+    payType: newUser.payType,
   };
 }
 
@@ -49,7 +51,7 @@ export async function getEmployeesByAdmin(adminId, search, cursor, limit = 10) {
   }
 
   const employees = await User.find(paginationQuery)
-    .select("name email createdAt")
+    .select("name email createdAt payType")
     .sort({ _id: -1 })
     .limit(Number(limit) + 1);
 

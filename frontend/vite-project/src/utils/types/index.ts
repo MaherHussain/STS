@@ -6,7 +6,8 @@ export interface User {
         startTime: string;
         endTime: string;
         breakDuration: number;
-    }
+    };
+    payType: 'HOURLY' | 'REVENUE';
 }
 export interface Employee extends User {
     isActive: boolean;
@@ -25,6 +26,7 @@ export interface EmployeesResponse {
             _id: string;
             name: string;
             email: string;
+            payType: 'HOURLY' | 'REVENUE';
             createdAt: string;
         }[];
         pagination: {

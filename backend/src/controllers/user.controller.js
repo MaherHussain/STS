@@ -7,7 +7,7 @@ import {
 
 export async function addUser(req, res, next) {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name, payType, revenueShare } = req.body;
     if (!email || !password) {
       return next(
         createHttpError(400, "Email and password are required fields."),
@@ -18,6 +18,7 @@ export async function addUser(req, res, next) {
       email,
       password,
       name,
+      payType,
       adminId: req.user.id,
     });
 
