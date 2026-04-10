@@ -3,17 +3,18 @@ import createHttpError from "http-errors";
 
 export const submitShiftLog = async (req, res, next) => {
   try {
-    const { date, startTime, endTime, breakDuration, ownPay } = req.body;
+    const { date, shiftType, startTime, endTime, breakDuration, revenue, notes, ownPay } = req.body;
     const userId = req.user.id;
-    if(!startTime || !endTime || !breakDuration){
-        return next(createHttpError(400, "StartTime, EndTime and BreakDuration are required fields"));
-    }
+
     const newLog = await createShiftLog({
       userId,
       date,
+      shiftType,
       startTime,
       endTime,
       breakDuration,
+      revenue,
+      notes,
       ownPay,
       imageUrl: req.file?.path ?? null,
     });

@@ -21,7 +21,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 function AdminDashboard() {
   const [isAddFormOpen, setIsAddFormOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<{ _id: string; name: string } | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<{ _id: string; name: string; payType: 'HOURLY' | 'REVENUE' } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const { user } = useAuth();

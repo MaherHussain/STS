@@ -89,6 +89,7 @@ function Home() {
             summary={summary}
             isPending={isPending}
             isError={isError}
+            payType={user?.payType}
           />
           {hasNextPage && (
             <div className="mt-4 flex justify-center pb-2">

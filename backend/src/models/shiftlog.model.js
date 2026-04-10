@@ -13,13 +13,19 @@ const shiftLogSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+    shiftType: {
+      type: String,
+      enum: ["HOURLY", "REVENUE"],
+      default: "HOURLY",
+      required: true,
+    },
     startTime: {
       type: String, // Storing as "HH:mm" (e.g., "09:00")
-      required: true,
+      required: false,
     },
     endTime: {
       type: String, // Storing as "HH:mm" (e.g., "17:00")
-      required: true,
+      required: false,
     },
     breakDuration: {
       type: Number, // In minutes
@@ -27,7 +33,11 @@ const shiftLogSchema = new mongoose.Schema(
     },
     totalHours: {
       type: Number,
-      required: true, // Calculated before saving
+      required: false, // Calculated before saving
+    },
+    revenue: {
+      type: Number,
+      default: 0,
     },
     imageUrl: {
       type: String,
@@ -36,6 +46,10 @@ const shiftLogSchema = new mongoose.Schema(
     ownPay: {
       type: Number,
       default: 0,
+    },
+    notes: {
+      type: String,
+      trim: true,
     },
     
   },
