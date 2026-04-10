@@ -21,6 +21,8 @@ export default function AddShiftLogModal({
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [breakDuration, setBreakDuration] = useState<number>(0);
+  const [revenue, setRevenue] = useState<number | undefined>(undefined);
+  const [notes, setNotes] = useState("");
 
   const [ownPay, setOwnPay] = useState<number | undefined>(undefined);
   const [file, setFile] = useState<File | null>(null);
@@ -44,13 +46,19 @@ export default function AddShiftLogModal({
 
   if (!open) return null;
 
+  const isHourly = user?.payType === 'HOURLY';
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     const payload = {
         date: date || undefined,
-        startTime,
-        endTime,
-        breakDuration,
+      shiftType: user?.payType || 'HOURLY',
+      startTime: isHourly ? startTime : undefined,
+      endTime: isHourly ? endTime : undefined,
+      breakDuration: isHourly ? breakDuration : undefined,
+      revenue: !isHourly ? revenue : undefined,
+      notes: notes || undefined,
         ownPay,
         file
     };
@@ -64,6 +72,8 @@ export default function AddShiftLogModal({
         setStartTime("");
         setEndTime("");
         setBreakDuration(0);
+        setRevenue(undefined);
+        setNotes("");
         setOwnPay(undefined);
         setFile(null);
         onClose();
@@ -126,45 +136,79 @@ export default function AddShiftLogModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                Start Time
-                </label>
-                <input
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                />
-            </div>
+          {user?.payType === 'HOURLY' ? (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    Start Time
+                  </label>
+                  <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    required={isHourly}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
 
-            <div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    End Time
+                  </label>
+                  <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    required={isHourly}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
-                End Time
+                  Break Duration (minutes)
                 </label>
                 <input
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  type="number"
+                  value={breakDuration}
+                  onChange={(e) => setBreakDuration(Number(e.target.value))}
+                  min={0}
+                  required={isHourly}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
+              </div>
+            </>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">
+                  Total Revenue
+                </label>
+                <input
+                  type="number"
+                  value={revenue}
+                  onChange={(e) => setRevenue(Number(e.target.value))}
+                  required={!isHourly}
+                  min={0}
+                  placeholder="e.g. 500"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Break Duration (minutes)
+              Notes (optional)
             </label>
-            <input
-              type="number"
-              value={breakDuration}
-              onChange={(e) => setBreakDuration(Number(e.target.value))}
-              min={0}
-              required
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Any details about this shift..."
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              rows={2}
             />
           </div>
 
@@ -176,6 +220,7 @@ export default function AddShiftLogModal({
               type="number"
               value={ownPay}
               onChange={(e) => setOwnPay(Number(e.target.value))}
+              placeholder="Extra expenses or adjustments"
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
           </div>

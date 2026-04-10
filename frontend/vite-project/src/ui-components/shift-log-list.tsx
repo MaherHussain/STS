@@ -3,16 +3,21 @@ import { LoadingSpinner } from "./index";
 export type ShiftLog = {
   _id: string;
   date: string;
-  startTime: string;
-  endTime: string;
-  breakDuration: number;
+  shiftType: "HOURLY" | "REVENUE";
+  startTime?: string;
+  endTime?: string;
+  breakDuration?: number;
+  revenue?: number;
+  notes?: string;
   ownPay?: number;
+  totalHours?: number;
   imageUrl?: string;
   createdAt: string;
 };
 
 export type ShiftLogSummary = {
   totalHours: number;
+  totalRevenue?: number;
   totalOwnPay: number;
   count: number;
 };
@@ -22,6 +27,7 @@ type ShiftLogListProps = {
   summary?: ShiftLogSummary;
   isPending: boolean;
   isError: boolean;
+  payType?: "HOURLY" | "REVENUE";
 };
 
 export default function ShiftLogList({
@@ -29,6 +35,7 @@ export default function ShiftLogList({
   summary,
   isPending,
   isError,
+  payType,
 }: ShiftLogListProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
@@ -53,9 +60,14 @@ export default function ShiftLogList({
             <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="px-4 py-3 font-medium">Date</th>
-                <th className="px-4 py-3 font-medium">Start Time</th>
-                <th className="px-4 py-3 font-medium">End Time</th>
-                <th className="px-4 py-3 font-medium">Break</th>
+                {payType === "HOURLY" ? (
+                  <>
+                    <th className="px-4 py-3 font-medium">Shift Time</th>
+                    <th className="px-4 py-3 font-medium">Hours</th>
+                  </>
+                ) : (
+                  <th className="px-4 py-3 font-medium">Revenue</th>
+                )}
                 <th className="px-4 py-3 font-medium">Own Pay</th>
                 <th className="px-4 py-3 font-medium">Proof</th>
               </tr>
@@ -66,13 +78,31 @@ export default function ShiftLogList({
                   <td className="px-4 py-3 text-gray-900">
                     {new Date(log.date).toLocaleDateString("en-GB")}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">{log.startTime}</td>
-                  <td className="px-4 py-3 text-gray-600">{log.endTime}</td>
+
+                  {payType === "HOURLY" ? (
+                    <>
+                      <td className="px-4 py-3 text-gray-600">
+                        <div>
+                          <div className="font-medium text-gray-900">{log.startTime} - {log.endTime}</div>
+                          <div className="text-xs text-gray-500">Break: {log.breakDuration}m</div>
+                        </div>
+                        {log.notes && <div className="mt-1 text-xs italic text-gray-400 truncate max-w-[200px]">{log.notes}</div>}
+                      </td>
+                      <td className="px-4 py-3 text-gray-600">
+                        {log.totalHours?.toFixed(2)} hrs
+                      </td>
+                    </>
+                  ) : (
+                    <td className="px-4 py-3 text-gray-600">
+                        <div>
+                          <div className="font-medium text-gray-900">{log.revenue?.toLocaleString()}</div>
+                        </div>
+                        {log.notes && <div className="mt-1 text-xs italic text-gray-400 truncate max-w-[200px]">{log.notes}</div>}
+                      </td>
+                  )}
+
                   <td className="px-4 py-3 text-gray-600">
-                    {log.breakDuration} mins
-                  </td>
-                  <td className="px-4 py-3 text-gray-600">
-                    {log.ownPay} 
+                    {log.ownPay || 0}
                   </td>
                   <td className="px-4 py-3">
                     {log.imageUrl ? (
@@ -80,9 +110,8 @@ export default function ShiftLogList({
                       <img
                         src={log.imageUrl}
                         alt="Proof"
-                        className="w-16 h-16 object-cover rounded shadow-sm border border-gray-200"
-                        onError={(e) => {
-                          // Fallback for old local files if they still exist in the database
+                          className="w-12 h-12 object-cover rounded shadow-sm border border-gray-200"
+                          onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           if (!target.src.includes("/uploads/")) {
                             const fileName = log.imageUrl?.split(/[\\/]/).pop();
@@ -91,7 +120,7 @@ export default function ShiftLogList({
                         }}
                         />
                       </a>) : (
-                      <span className="text-gray-400">No proof</span>
+                        <span className="text-gray-400 text-xs">No proof</span>
                     )}
                   </td>
                 </tr>
@@ -99,19 +128,22 @@ export default function ShiftLogList({
             </tbody>
             {summary && logs && logs.length > 0 && (
               <tfoot className="bg-gray-50 font-semibold text-gray-900 border-t-2 border-gray-200">
-                <tr>
-                  <td className="px-4 py-3" colSpan={3}>Total worked hours</td>
-                  
-                  <td className="px-4 py-3 text-indigo-600">{summary.totalHours} hrs</td>
-                  <td className="px-4 py-3"></td>
-                  <td className="px-4 py-3"></td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3" colSpan={3}>Total own pay</td>
-                  <td className="px-4 py-3 text-indigo-600">{summary.totalOwnPay}</td>
-                  <td className="px-4 py-3"></td>
-                  <td className="px-4 py-3"></td>
-                </tr>
+                {payType === "HOURLY" ? (
+                  <tr>
+                    <td className="px-4 py-3">Total</td>
+                    <td className="px-4 py-3 text-indigo-600" colSpan={1}></td>
+                    <td className="px-4 py-3 text-indigo-600">{summary.totalHours.toFixed(2)} hrs</td>
+                    <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0}</td>
+                    <td className="px-4 py-3"></td>
+                  </tr>
+                ) : (
+                    <tr>
+                      <td className="px-4 py-3">Total</td>
+                      <td className="px-4 py-3 text-green-600">{summary.totalRevenue?.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-red-600">{summary.totalOwnPay || 0}</td>
+                      <td className="px-4 py-3"></td>
+                    </tr>
+                )}
               </tfoot>
             )}
           </table>

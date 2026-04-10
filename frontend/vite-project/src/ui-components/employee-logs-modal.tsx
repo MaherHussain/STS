@@ -6,6 +6,7 @@ type EmployeeLogsModalProps = {
   employee: {
     _id: string;
     name: string;
+    payType: 'HOURLY' | 'REVENUE';
   } | null;
   onClose: () => void;
 };
@@ -110,6 +111,7 @@ export default function EmployeeLogsModal({
             summary={summary}
             isPending={isPending}
             isError={isError}
+            payType={employee.payType}
             />
 
           {/* Load More Button */}
