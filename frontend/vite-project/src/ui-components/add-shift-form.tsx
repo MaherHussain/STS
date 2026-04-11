@@ -89,7 +89,7 @@ export default function AddShiftLogModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg overflow-y-auto max-h-[90vh]">
+      <div className="w-full max-w-md rounded-xl bg-white mx-2 p-6 shadow-lg overflow-y-auto max-h-[90vh]">
         {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900">Add Shift Log</h2>
@@ -139,9 +139,9 @@ export default function AddShiftLogModal({
 
           {user?.payType === 'HOURLY' ? (
             <>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">
+              <div className="flex flex-row gap-4">
+                <div className="flex-1/2">
+                  <label className="mb-1  block text-sm font-medium text-gray-700">
                     Start Time
                   </label>
                   <input
@@ -153,7 +153,7 @@ export default function AddShiftLogModal({
                   />
                 </div>
 
-                <div>
+                <div className="flex-1/2">
                   <label className="mb-1 block text-sm font-medium text-gray-700">
                     End Time
                   </label>
