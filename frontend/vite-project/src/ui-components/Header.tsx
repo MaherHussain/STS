@@ -36,7 +36,7 @@ export default function Header({
           <span className=" sm:block text-sm text-gray-600">{user.email}</span>
         )}
 
-        {user?.role !== "ADMIN" && (
+        {user?.role !== "ADMIN" && user?.payType === "HOURLY" && (
           <button
             onClick={() => setIsSettingsOpen(true)}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
