@@ -30,6 +30,7 @@ export async function loginService(email, password) {
     email: user.email,
     role: user.role,
     shiftTemplate: user.shiftTemplate,
+    name: user.name,
     payType: user.payType,
   };
   const accessToken = jwt.sign(
@@ -43,7 +44,7 @@ export async function loginService(email, password) {
 }
 
 export async function getUserService(userId) {
-  const user = await User.findById(userId).select("email role isActive shiftTemplate payType");
+  const user = await User.findById(userId).select("email role isActive shiftTemplate payType name");
   if (!user) {
     const error = new Error("User not found");
     error.statusCode = 404;
@@ -60,6 +61,7 @@ export async function getUserService(userId) {
     id: user._id,
     email: user.email,
     role: user.role,
+    name: user.name,
     shiftTemplate: user.shiftTemplate,
     payType: user.payType,
   };
