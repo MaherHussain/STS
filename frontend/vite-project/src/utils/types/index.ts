@@ -2,6 +2,7 @@ export interface User {
     id: string,
     email: string,
     role: 'ADMIN' | 'EMPLOYEE',
+    name: string | null | undefined,
     shiftTemplate?: {
         startTime: string;
         endTime: string;
@@ -12,7 +13,6 @@ export interface User {
 export interface Employee extends User {
     isActive: boolean;
     createdBy: string;
-    name: string | null | undefined;
 }
 export interface EmployeeResponse {
     success: boolean,
