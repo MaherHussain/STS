@@ -33,7 +33,7 @@ export default function Header({
       {/* Right */}
       <div className="flex items-center gap-4">
         {user?.email && (
-          <span className=" sm:block text-sm text-gray-600">{user.email}</span>
+          <span className="truncate max-w-[80px] md:max-w-none md:overflow-visible md:whitespace-normal text-sm text-gray-600">{user.email}</span>
         )}
 
         {user?.role !== "ADMIN" && user?.payType === "HOURLY" && (
