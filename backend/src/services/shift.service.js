@@ -37,6 +37,15 @@ export const createShiftLog = async ({ userId, date, shiftType, startTime, endTi
     // 1. If no date is provided, use today's date
     const shiftDate = date ? new Date(date) : new Date();
 
+    // Check if shiftDate is in the future
+    const now = new Date();
+    now.setHours(23, 59, 59, 999); // Allow logs for today
+    if (shiftDate > now) {
+        const error = new Error("Cannot submit a log for a future date.");
+        error.status = 400;
+        throw error;
+    }
+
     // Check if a log already exists for this user on this date
     const startOfDay = new Date(shiftDate);
     startOfDay.setHours(0, 0, 0, 0);
@@ -50,7 +59,7 @@ export const createShiftLog = async ({ userId, date, shiftType, startTime, endTi
     });
 
     if (existingLog) {
-        const error = new Error("You have already submitted a log for Today.");
+        const error = new Error("You have already submitted a log for this date.");
         error.status = 409;
         throw error;
     }

@@ -302,3 +302,4 @@ npm run test:e2e:ui   # Playwright with interactive UI
 6. **Pagination**: Shift logs use composite cursor pagination (`date` + `_id`) for correct chronological ordering.
 7. **Pay type logic**: `shiftType` on ShiftLog mirrors `payType` on User. HOURLY shifts require `startTime`/`endTime`; REVENUE shifts use `revenue` field instead.
 8. **Tailwind v4**: Uses the Vite plugin (`@tailwindcss/vite`), not PostCSS — no `tailwind.config.js` file.
+9. **Shift Date Selection**: Employees can select the date for their shifts (supporting backfilling), but future dates are prohibited by both frontend `max` attributes and backend validation logic.
